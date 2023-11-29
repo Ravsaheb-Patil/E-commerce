@@ -24,14 +24,12 @@ public class UserController {
 
 
     /**
-     * @author Ravsaheb Patil
-     * @apiNote save user into database
      * @param user
      * @return UserDto
+     * @author Ravsaheb Patil
+     * @apiNote save user into database
      * @since 1.0v
      */
-
-
     @PostMapping("/")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         log.info("Enter the  request for Save the User : {} user");
@@ -44,32 +42,29 @@ public class UserController {
     }
 
     /**
-     * @author Sujit Patil
-     * @apiNote get  User By Id
      * @param userId
      * @return UserDto
+     * @author Ravsaheb Patil
+     * @apiNote get  User By Id
      * @since 1.0v
      */
-
-
-
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String userId) {
         UserDto userById = this.userServiceI.getUserById(userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
 
     }
+
     /**
-     * @author Ravsaheb Patil
-     * @apiNote get All Users
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param direction
      * @return PageableResponse
+     * @author Ravsaheb Patil
+     * @apiNote get All Users
      * @since 1.0v
      */
-
     @GetMapping("/")
     public ResponseEntity<PageableResponse> getAllUsers(
 
@@ -84,13 +79,12 @@ public class UserController {
     }
 
     /**
-     * @author Ravsaheb Patil
      * @param userDto
      * @param userId
      * @return UserDto
+     * @author Ravsaheb Patil
      * @since 1.0v
      */
-
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId) {
         log.info("Enter the  request for update  the user with UserId :{} str");
@@ -100,15 +94,14 @@ public class UserController {
 
 
     }
+
     /**
-     * @author Ravsaheb Patil
-     * @apiNote get User  Containing keyword
      * @param keyword
      * @return List<UserDto>
+     * @author Ravsaheb Patil
+     * @apiNote get User  Containing keyword
      * @since 1.0v
      */
-
-
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> getUserContaing(@PathVariable String keyword) {
 
@@ -121,45 +114,35 @@ public class UserController {
     }
 
     /**
-     * @author Ravsaheb Patil
-     * @apiNote get user by email
      * @param email
      * @return UserDto
+     * @author Ravsaheb Patil
+     * @apiNote get user by email
      * @since 1.0v
      */
-
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        log.info("Enter the  request for get the user with EmailId :{} ",email);
+        log.info("Enter the  request for get the user with EmailId :{} ", email);
         UserDto userByEmailId = this.userServiceI.getUserByEmailId(email);
-        log.info("Completed the  request for get the user with EmailId :{} ",email);
+        log.info("Completed the  request for get the user with EmailId :{} ", email);
         return new ResponseEntity<UserDto>(userByEmailId, HttpStatus.OK);
     }
+
     /**
-     * @author Ravsaheb Patil
-     * @apiNote get User By Email Id And Password
      * @param email
      * @param password
      * @return UserDto
+     * @author Ravsaheb Patil
+     * @apiNote get User By Email Id And Password
      * @since 1.0v
      */
-
-
-
-
     @GetMapping("/email/{email}/pass/{password}")
     public ResponseEntity<UserDto> getUserByEmailAndPass(@PathVariable String email, @PathVariable String password) {
-
-        log.info("Enter the  request for get the user with EmailId And Password :{} :{} ",email,password);
+        log.info("Enter the  request for get the user with EmailId And Password :{} :{} ", email, password);
         UserDto userByEmailAndPassword = this.userServiceI.getUserByEmailAndPassword(email, password);
-        log.info("Completed the  request for get the user with EmailId And Password :{} :{} ",email,password);
-        return  new ResponseEntity<UserDto>(userByEmailAndPassword,HttpStatus.OK);
+        log.info("Completed the  request for get the user with EmailId And Password :{} :{} ", email, password);
+        return new ResponseEntity<UserDto>(userByEmailAndPassword, HttpStatus.OK);
     }
-
-
-
-
-
 
 
 }
