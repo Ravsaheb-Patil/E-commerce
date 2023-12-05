@@ -18,7 +18,7 @@ public class CategoryDto {
     private String title;
 
     @NotBlank
-    @Size(min = 5,max = 500,message = "Category Description Must Be Min 5 Character & Max 500 Character")
+    @Size(min = 5,max = 500,message = "Category Description Must Be Min 5 Character & Max 400 Character")
     private String description;
 
     @ImageNameValid (message = "Image Name Must Not  Be Blank")
