@@ -7,16 +7,18 @@ import com.Electro.Exception.ResourceNotFoundException;
 import com.Electro.Helper.Helper;
 import com.Electro.Repository.UserRepo;
 import com.Electro.ServiceI.UserServiceI;
-import jakarta.persistence.Id;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserServiceI {
 
    @Autowired
    ModelMapper modelMapper;
+    @Value("${user.profile.image.path}")
+    private String path;
+
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -86,10 +91,18 @@ public class UserServiceImpl implements UserServiceI {
     public void deleteUser(String userId) {
         log.info("Entering the Dao call for delete the user with userId :{} id");
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("ResourceNotFound with Id "));
+        String imageName = user.getImageName();
+        String fullPath = path + imageName;
+
+        File Image=new File(fullPath);
+        if(Image.exists()){
+            Image.delete();
+        }
+
+        log.info("Completed the Dao call for delete the user with userId :{} id");
         this.userRepo.delete(user);
 
     }
-
     @Override
     public UserDto getUserByEmailId(String email) {
         log.info("Entering the Dao call for get Single user with emailId :{}  id");

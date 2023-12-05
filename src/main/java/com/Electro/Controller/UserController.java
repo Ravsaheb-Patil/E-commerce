@@ -1,5 +1,6 @@
 package com.Electro.Controller;
 
+import com.Electro.Constanst.AppConstant;
 import com.Electro.Dto.ApiResponseMassage;
 import com.Electro.Dto.PageableResponse;
 import com.Electro.Dto.UserDto;
@@ -7,6 +8,7 @@ import com.Electro.ServiceI.UserServiceI;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserServiceI userServiceI;
+
+    @Value("${user.profile.image.path}")
+    private String path;
 
 
     /**
@@ -111,6 +116,20 @@ public class UserController {
 
         return new ResponseEntity<List<UserDto>>(userDtos, HttpStatus.OK);
 
+    }
+
+
+    @DeleteMapping("/delete/{userid}")
+    public ResponseEntity<ApiResponseMassage> deleteUser(@PathVariable String userid) {
+        log.info("Enter the  request for Delete the user with UserId :{} ",userid);
+
+        this.userServiceI.deleteUser(userid);
+        ApiResponseMassage apiResponse=new ApiResponseMassage();
+        apiResponse.setMessage(AppConstant.DELETE +userid);
+        apiResponse.setStatus(true);
+        apiResponse.setStatusCode(HttpStatus.OK);
+        log.info("Completed  the  request for Delete the user with UserId :{} ",userid);
+        return new ResponseEntity<ApiResponseMassage>(apiResponse, HttpStatus.OK);
     }
 
     /**

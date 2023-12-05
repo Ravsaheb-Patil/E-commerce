@@ -1,6 +1,6 @@
 package com.Electro.Constanst;
 
-public class AppConstanst {
+public class AppConstant {
 
 
     public static final String NOT_FOUND="Resource Not Found On Server :";
