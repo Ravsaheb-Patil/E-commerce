@@ -3,16 +3,14 @@ package com.Electro.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 
 
 public class Category {
@@ -21,7 +19,7 @@ public class Category {
     @Column(name = "category_id")
     private String categoryId;
 
-    @Column(name = "category_image")
+    @Column(name = "category_title")
     private String title;
 
     @Column(name = "category_description")
