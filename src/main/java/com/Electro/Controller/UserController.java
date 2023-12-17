@@ -2,17 +2,25 @@ package com.Electro.Controller;
 
 import com.Electro.Constanst.AppConstant;
 import com.Electro.Dto.ApiResponseMassage;
+import com.Electro.Dto.ImageResponse;
 import com.Electro.Dto.PageableResponse;
 import com.Electro.Dto.UserDto;
+import com.Electro.ServiceI.FileService;
 import com.Electro.ServiceI.UserServiceI;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 
@@ -26,6 +34,7 @@ public class UserController {
 
     @Value("${user.profile.image.path}")
     private String path;
+    private FileService fileService;
 
 
     /**
@@ -121,14 +130,14 @@ public class UserController {
 
     @DeleteMapping("/delete/{userid}")
     public ResponseEntity<ApiResponseMassage> deleteUser(@PathVariable String userid) {
-        log.info("Enter the  request for Delete the user with UserId :{} ",userid);
+        log.info("Enter the  request for Delete the user with UserId :{} ", userid);
 
         this.userServiceI.deleteUser(userid);
-        ApiResponseMassage apiResponse=new ApiResponseMassage();
-        apiResponse.setMessage(AppConstant.DELETE +userid);
+        ApiResponseMassage apiResponse = new ApiResponseMassage();
+        apiResponse.setMessage(AppConstant.DELETE + userid);
         apiResponse.setStatus(true);
         apiResponse.setStatusCode(HttpStatus.OK);
-        log.info("Completed  the  request for Delete the user with UserId :{} ",userid);
+        log.info("Completed  the  request for Delete the user with UserId :{} ", userid);
         return new ResponseEntity<ApiResponseMassage>(apiResponse, HttpStatus.OK);
     }
 
@@ -163,5 +172,51 @@ public class UserController {
         return new ResponseEntity<UserDto>(userByEmailAndPassword, HttpStatus.OK);
     }
 
+    /**
+     * @param image
+     * @param userId
+     * @return ImageResponse
+     * @throws IOException
+     * @author Ravsaheb Patil
+     * @apiNote Upload The Image
+     * @since 1.0V
+     */
+    @PostMapping("/image/{userId}")
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam MultipartFile image, @PathVariable String userId) throws IOException {
+        log.info("Enter the request for Upload Image with UserId : {}", userId);
+        String file = this.fileService.uploadFile(image, path);
 
+        UserDto user = this.userServiceI.getSingleUser(userId);
+
+        user.setImageName(file);
+
+        UserDto updatedUser = this.userServiceI.updateUser(user, userId);
+
+        ImageResponse imageResponse = ImageResponse.builder().message("Image Uploaded").imageName(file).status(true).statusCode(HttpStatus.CREATED).build();
+
+        log.info("Completed the request for Upload Image with UserId : {}", userId);
+        return new ResponseEntity<ImageResponse>(imageResponse, HttpStatus.CREATED);
+
+    }
+
+    /**
+     * @param userId
+     * @param response
+     * @throws IOException
+     * @author Ravsaheb Patil
+     * @apiNote to Get Image with UserId
+     * @since 1.0v
+     */
+    @GetMapping("/image/{userId}")
+    public void getUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+        log.info("Enter the request for Get Image with UserId : {}", userId);
+        UserDto user = userServiceI.getUserImage(userId);
+        log.info(" UserImage Name : {}", user.getImageName());
+        InputStream resource = fileService.getResource(path, user.getImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        log.info("Completed the request for Get Image with UserId : {}", userId);
+        StreamUtils.copy(resource, response.getOutputStream());
+    }
 }
+
+

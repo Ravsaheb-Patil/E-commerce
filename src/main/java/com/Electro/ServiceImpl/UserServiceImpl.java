@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserServiceI {
 
    @Autowired
    ModelMapper modelMapper;
+
     @Value("${user.profile.image.path}")
     private String path;
 
@@ -129,6 +130,18 @@ public class UserServiceImpl implements UserServiceI {
         log.info("Completed the Dao call for get Single user with Email And Password  :{} :{} ",email,password);
         return userDto;
     }
+
+    @Override
+    public UserDto getUserImage(String userId) {
+
+        return null;
+    }
+
+    @Override
+    public UserDto getSingleUser(String userId) {
+        return null;
+    }
+
 
 }
 

@@ -31,5 +31,8 @@ public interface UserServiceI {
     UserDto getUserByEmailAndPassword(String email, String password);
 
 
+    UserDto getUserImage(String userId);
 
+
+    UserDto getSingleUser(String userId);
 }

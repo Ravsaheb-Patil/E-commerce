@@ -2,7 +2,9 @@ package com.Electro.ServiceI;
 
 import com.Electro.Dto.CategoryDto;
 import com.Electro.Dto.PageableResponse;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface CategoryServiceI {
 
     CategoryDto Createcategory(CategoryDto categoryDto);
